@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mat Mehmet | Matematik Testleri</title>
+<style>
+  :root{--m:#1F5FA8;--m2:#2f80d6;--a:#ffb703;--ok:#1b9e5a;--no:#d64545;--bg:#f2f7fd;--tx:#14263d}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);font-size:19px;line-height:1.5}
+  header{background:linear-gradient(135deg,var(--m),var(--m2));color:#fff;padding:22px 16px;text-align:center}
+  header .logo{font-size:34px;font-weight:800;letter-spacing:.5px}
+  header .logo span{color:var(--a)}
+  header p{margin:4px 0 0;opacity:.92;font-size:17px}
+  main{max-width:720px;margin:0 auto;padding:18px 14px 50px}
+  .card{background:#fff;border-radius:18px;padding:22px;box-shadow:0 4px 18px rgba(31,95,168,.12);margin-bottom:16px}
+  h2{margin:0 0 10px;color:var(--m)}
+  input[type=text]{width:100%;font-size:20px;padding:14px;border:2px solid #c6d8ee;border-radius:12px;margin:10px 0 16px}
+  input[type=text]:focus{outline:none;border-color:var(--m2)}
+  button{font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:14px;padding:14px 22px}
+  .go{background:var(--a);color:#3a2800;font-size:21px;width:100%}
+  .go:disabled{opacity:.45;cursor:default}
+  .bar{height:12px;background:#dbe8f7;border-radius:8px;overflow:hidden;margin-bottom:14px}
+  .bar div{height:100%;background:linear-gradient(90deg,var(--m2),var(--a));width:0;transition:width .35s}
+  .meta{display:flex;justify-content:space-between;color:#4a627d;font-size:16px;margin-bottom:6px}
+  .soru{font-size:21px;font-weight:600;margin:6px 0 14px}
+  .sekil{text-align:center;margin:8px 0 14px}
+  .sekil svg{max-width:100%;height:auto}
+  .sik{display:block;width:100%;text-align:left;background:#f4f8fd;border:2px solid #cfe0f3;margin:9px 0;font-weight:600;color:var(--tx)}
+  .sik:hover{border-color:var(--m2)}
+  .sik.dogru{background:#e4f6ec;border-color:var(--ok)}
+  .sik.yanlis{background:#fde9e9;border-color:var(--no)}
+  .aciklama{margin-top:12px;padding:12px 14px;border-radius:12px;background:#fff7dd;font-size:17px}
+  .next{background:var(--m);color:#fff;margin-top:14px;width:100%}
+  .puan{font-size:60px;font-weight:800;color:var(--m);text-align:center;margin:6px 0}
+  .mesaj{text-align:center;font-size:21px;margin-bottom:14px}
+  .ozet{padding:10px 12px;border-radius:12px;margin:8px 0;font-size:17px}
+  .ozet.d{background:#e4f6ec}.ozet.y{background:#fde9e9}
+  .gizli{display:none}
+  footer{text-align:center;color:#6a819c;font-size:14px;padding-bottom:24px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Mat <span>Mehmet</span></div>
+  <p>Matematik öğrenmek eğlenceli! &#9997;&#65039;</p>
+</header>
+<main>
+
+  <!-- 1) Karşılama -->
+  <section id="ekran-giris" class="card">
+    <h2>Merhaba! &#128075;</h2>
+    <p><b>6. Sınıf Matematik: Açılar ve Üçgenin İç Açıları</b><br>Demo testi · 7 soru</p>
+    <label for="ad">Adın ve soyadın:</label>
+    <input id="ad" type="text" placeholder="Örn: Elif Yılmaz" autocomplete="off">
+    <button id="basla" class="go" disabled>Teste Başla &#128640;</button>
+  </section>
+
+  <!-- 2) Test -->
+  <section id="ekran-test" class="card gizli">
+    <div class="meta"><span id="sira"></span><span id="puan-canli"></span></div>
+    <div class="bar"><div id="ilerleme"></div></div>
+    <div id="sekil" class="sekil"></div>
+    <div id="soru" class="soru"></div>
+    <div id="siklar"></div>
+    <div id="aciklama" class="aciklama gizli"></div>
+    <button id="sonraki" class="next gizli">Sonraki &#10132;</button>
+  </section>
+
+  <!-- 3) Sonuç -->
+  <section id="ekran-sonuc" class="card gizli">
+    <h2 id="sonuc-baslik"></h2>
+    <div class="puan" id="sonuc-puan"></div>
+    <div class="mesaj" id="sonuc-mesaj"></div>
+    <div id="ozet"></div>
+    <button id="tekrar" class="go" style="margin-top:14px">Tekrar Dene &#128260;</button>
+  </section>
+
+</main>
+<footer>Mat Mehmet · Demo sürümü</footer>
+
+<script>
+/* ===== SORULAR (öğretmen buradan kolayca değiştirebilir) =====
+   cevap: doğru seçeneğin sırası (0'dan başlar). sekil: "aci:120" veya "ucgen:50,60" */
+const SORULAR = [
+  {s:"35° ölçüsündeki açı hangi türdendir?",
+   o:["Dar açı","Dik açı","Geniş açı","Doğru açı"], cevap:0,
+   ac:"90°'den küçük açılara dar açı denir. 35° &lt; 90° olduğu için dar açıdır."},
+  {sekil:"aci:120", s:"Şekildeki açının ölçüsü yaklaşık kaç derecedir?",
+   o:["60°","90°","120°","150°"], cevap:2,
+   ac:"Açı, dik açıdan (90°) belirgin biçimde açık ama doğru açıdan (180°) küçük. Ölçüsü 120° olan bir geniş açıdır."},
+  {sekil:"ucgen:50,60", s:"Şekildeki üçgende ? işaretli açı kaç derecedir?",
+   o:["60°","70°","80°","110°"], cevap:1,
+   ac:"Üçgenin iç açıları toplamı 180°'dir. 180 − (50 + 60) = 70°."},
+  {sekil:"ucgen:90,35", s:"Bir köşesi 90°, bir köşesi 35° olan üçgenin üçüncü açısı kaç derecedir?",
+   o:["35°","45°","55°","65°"], cevap:2,
+   ac:"180 − (90 + 35) = 55°."},
+  {s:"Bir üçgenin açıları 3x, 4x ve 5x'tir. En büyük açı kaç derecedir?",
+   o:["60°","75°","80°","90°"], cevap:1,
+   ac:"3x + 4x + 5x = 12x = 180° → x = 15. Açılar 45°, 60° ve 75°'dir. En büyüğü 75°."},
+  {s:"Saat tam 4:00'ı gösterirken akrep ile yelkovan arasındaki açı kaç derecedir?",
+   o:["90°","100°","120°","150°"], cevap:2,
+   ac:"Saatin her rakam aralığı 30°'dir. 4 × 30° = 120°."},
+  {s:"Ali \"Bir üçgenin iki açısı 90° ve 100° olabilir\" diyor. Ali haklı mı?",
+   o:["Evet, olabilir","Hayır, toplam 180°'yi aşar","Evet, ama üçüncü açı negatif olur","Hayır, üçgenin hiç dik açısı olmaz"], cevap:1,
+   ac:"90 + 100 = 190° olur ve bu 180°'den büyüktür. Üçgenin iç açıları toplamı tam 180° olmalıdır."}
+];
+
+/* ===== Şekil çizimi (SVG) ===== */
+function aciSvg(d){
+  const x=40,y=120,L=130,r=d*Math.PI/180;
+  return `<svg width="240" height="150" viewBox="0 0 240 150"><line x1="${x}" y1="${y}" x2="${x+L}" y2="${y}" stroke="#14263d" stroke-width="4" stroke-linecap="round"/>
+  <line x1="${x}" y1="${y}" x2="${x+L*Math.cos(r)}" y2="${y-L*Math.sin(r)}" stroke="#14263d" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="${x}" cy="${y}" r="5" fill="#1F5FA8"/></svg>`;
+}
+function ucgenSvg(A,B){
+  const C=180-A-B, a=A*Math.PI/180, b=B*Math.PI/180, c=C*Math.PI/180;
+  const base=190, sb=base*Math.sin(b)/Math.sin(c);
+  const P=[20,150], Q=[20+base,150], R=[20+sb*Math.cos(a),150-sb*Math.sin(a)];
+  return `<svg width="240" height="170" viewBox="0 0 240 170"><polygon points="${P} ${Q} ${R}" fill="#EAF2FB" stroke="#14263d" stroke-width="3.5" stroke-linejoin="round"/>
+  <text x="${P[0]+18}" y="142" font-size="16" font-weight="700" fill="#14263d">${A}°</text>
+  <text x="${Q[0]-58}" y="142" font-size="16" font-weight="700" fill="#14263d">${B}°</text>
+  <text x="${R[0]-8}" y="${R[1]+28}" font-size="20" font-weight="800" fill="#d64545">?</text></svg>`;
+}
+function sekilCiz(t){
+  if(!t) return "";
+  const [tip,v]=t.split(":"), n=v.split(",").map(Number);
+  return tip==="aci"?aciSvg(n[0]):ucgenSvg(n[0],n[1]);
+}
+
+/* ===== Test akışı ===== */
+const $=id=>document.getElementById(id);
+let i=0, puan=0, kayit=[], ad="";
+const karistir=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
+
+$("ad").addEventListener("input",()=>{$("basla").disabled=$("ad").value.trim().length<3});
+$("basla").onclick=()=>{ad=$("ad").value.trim();i=0;puan=0;kayit=[];
+  $("ekran-giris").classList.add("gizli");$("ekran-test").classList.remove("gizli");goster()};
+
+function goster(){
+  const q=SORULAR[i];
+  $("sira").textContent=`Soru ${i+1} / ${SORULAR.length}`;
+  $("puan-canli").textContent=`⭐ ${puan} puan`;
+  $("ilerleme").style.width=(i/SORULAR.length*100)+"%";
+  $("sekil").innerHTML=sekilCiz(q.sekil);
+  $("soru").textContent=q.s;
+  $("aciklama").classList.add("gizli");$("sonraki").classList.add("gizli");
+  const siklar=karistir(q.o.map((m,k)=>({m,d:k===q.cevap})));
+  $("siklar").innerHTML="";
+  siklar.forEach(s=>{
+    const b=document.createElement("button");b.className="sik";b.textContent=s.m;
+    b.onclick=()=>sec(b,s.d,siklar,q);$("siklar").appendChild(b);
+  });
+}
+function sec(btn,dogruMu,siklar,q){
+  [...$("siklar").children].forEach((b,k)=>{b.disabled=true;if(siklar[k].d)b.classList.add("dogru")});
+  if(dogruMu){puan++}else{btn.classList.add("yanlis")}
+  kayit.push({q:q.s,dogru:dogruMu,ac:q.ac});
+  $("puan-canli").textContent=`⭐ ${puan} puan`;
+  $("aciklama").innerHTML=(dogruMu?"✅ <b>Aferin, doğru!</b><br>":"❌ <b>Bu sefer olmadı.</b><br>")+q.ac;
+  $("aciklama").classList.remove("gizli");
+  $("sonraki").textContent=i===SORULAR.length-1?"Sonucu Gör 🏁":"Sonraki ➜";
+  $("sonraki").classList.remove("gizli");
+}
+$("sonraki").onclick=()=>{ if(++i<SORULAR.length) goster(); else bitir(); };
+
+function bitir(){
+  $("ekran-test").classList.add("gizli");$("ekran-sonuc").classList.remove("gizli");
+  const yuzde=Math.round(puan/SORULAR.length*100);
+  $("sonuc-baslik").textContent=`${ad}, testi bitirdin! 🎉`;
+  $("sonuc-puan").textContent=`${puan} / ${SORULAR.length}`;
+  $("sonuc-mesaj").textContent = yuzde>=85?"Muhteşem! Sen bu konuyu çok iyi biliyorsun 🏆":
+    yuzde>=60?"Güzel iş! Biraz tekrarla harika olacak 👍":"Pes etme! Açıklamaları okuyup tekrar dene 💪";
+  $("ozet").innerHTML=kayit.map((k,n)=>`<div class="ozet ${k.dogru?'d':'y'}">${k.dogru?'✅':'❌'} <b>${n+1}.</b> ${k.q}${k.dogru?'':'<br><small>'+k.ac+'</small>'}</div>`).join("");
+}
+$("tekrar").onclick=()=>{$("ekran-sonuc").classList.add("gizli");$("ekran-giris").classList.remove("gizli");$("basla").disabled=$("ad").value.trim().length<3};
+</script>
+</body>
+</html>
